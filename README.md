@@ -8,6 +8,9 @@ orda_smu/
     __init__.py
     db_config.py        # DB 접속 정보
     data_loader.py      # PostgreSQL → total_hiking_data 로딩
+    csv/
+        geocode_address_area.py # 주소 → 행정구역 변환 (카카오맵 API)
+        *.csv                   # 전처리된 위치/주소 데이터
   model1/
     motivation_stamp.py      # SW3: 참여율 점수
     motivation_distance.py   # SW4: 도전 의지(거리) 점수
