@@ -2,15 +2,16 @@
 
 ## 1. 폴더 구조
 
+```text
 orda_smu/
   data/
     __init__.py
     db_config.py        # DB 접속 정보
     data_loader.py      # PostgreSQL → total_hiking_data 로딩
   model1/
-    motivationstamp.py  # SW3: 참여율 점수
-    motivationdistance.py # SW4: 도전 의지(거리) 점수
-    run_model1.py       # 모델1 실행 (SW3+SW4)
+    motivationstamp.py      # SW3: 참여율 점수
+    motivationdistance.py   # SW4: 도전 의지(거리) 점수
+    run_model1.py           # 모델1 실행 (SW3+SW4)
   model2/
     healthscore.py      # SW2: 체력 점수(속도)
     trendscore.py       # SW6: 개선율 점수
@@ -20,6 +21,7 @@ orda_smu/
   .venv/                # 가상환경 (로컬에서만 사용)
   requirements.txt      # 필요한 패키지 목록
   README.md
+
 ```
 
 ---
