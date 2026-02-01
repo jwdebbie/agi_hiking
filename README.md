@@ -73,8 +73,8 @@ python -m data.data_loader
 - SW4: 집 주소–코스 시작점 거리 기반 도전 의지 (현재는 주소 구조에 맞게 추가 작업 필요).
 
 실행:
-python -m model1.motivationstamp      # SW3만
-python -m model1.motivationdistance   # SW4만
+python -m model1.motivation_stamp      # SW3만
+python -m model1.motivation_distance   # SW4만
 python -m model1.run_model1           # 모델1 최종 (SW3+SW4)
 
 출력:  
