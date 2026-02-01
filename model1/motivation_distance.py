@@ -3,8 +3,8 @@
 SW4 - 거리 기반 도전 의지 점수 (motivation_distance)
 
 입력:
-  Member: address (위도,경도 형식 문자열)
-  Stamp: latitude, longitude (코스 시작지점)
+  Member: member_latitude, member_longitude (회원 집 좌표)
+  Stamp: stamp_latitude, stamp_longitude (코스 시작점)
 
 계산:
   집 → 코스 시작점 거리 (km)
@@ -40,29 +40,16 @@ class MotivationDistanceCalculator:
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return R * c
 
-    @staticmethod
-    def _parse_addr(addr: str):
-        """
-        address가 '37.56,126.97' 형식이라고 가정. (현재 한글 행정구/도로명 주소로 표현되어 잇기에, 위도,경도 형식으로 변환 필요 )
-        """
-        if not isinstance(addr, str):
-            return None, None
-        parts = addr.strip("[]").split(",")
-        if len(parts) < 2:
-            return None, None
-        try:
-            lat = float(parts[0].strip())
-            lon = float(parts[1].strip())
-            return lat, lon
-        except ValueError:
-            return None, None
-
     def _prepare_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         total_hiking_data에서 거리 계산에 필요한 컬럼만 사용:
-        user_key, address, latitude, longitude
+        user_key, member_latitude, member_longitude, stamp_latitude, stamp_longitude
         """
-        df = df[["user_key", "address", "latitude", "longitude"]].copy()
+        df = df[["user_key", "member_latitude", "member_longitude", "stamp_latitude", "stamp_longitude"]].copy()
+        
+        # 숫자 변환(문자열로 들어왔을 때 대비)
+        for c in ["member_latitude", "member_longitude", "stamp_latitude", "stamp_longitude"]:
+            df[c] = pd.to_numeric(df[c], errors="coerce")
         return df
 
     def calculate_batch(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -73,18 +60,18 @@ class MotivationDistanceCalculator:
         results = []
 
         for user, g in df.groupby("user_key"):
-            addr = g["address"].iloc[0]
-            home_lat, home_lon = self._parse_addr(addr)
-            if home_lat is None:
+            home_lat = g["member_latitude"].iloc[0]
+            home_lon = g["member_longitude"].iloc[0]
+
+            if pd.isna(home_lat) or pd.isna(home_lon):
                 avg_dist = 0.0
             else:
                 dists = []
                 for _, row in g.iterrows():
-                    lat, lon = row["latitude"], row["longitude"]
+                    lat, lon = row["stamp_latitude"], row["stamp_longitude"]
                     if pd.isna(lat) or pd.isna(lon):
                         continue
-                    d = self._haversine(home_lat, home_lon, lat, lon)
-                    dists.append(d)
+                    dists.append(self._haversine(home_lat, home_lon, lat, lon))
 
                 if not dists:
                     avg_dist = 0.0
