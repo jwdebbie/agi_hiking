@@ -9,8 +9,8 @@ orda_smu/
     db_config.py        # DB 접속 정보
     data_loader.py      # PostgreSQL → total_hiking_data 로딩
   model1/
-    motivationstamp.py      # SW3: 참여율 점수
-    motivationdistance.py   # SW4: 도전 의지(거리) 점수
+    motivation_stamp.py      # SW3: 참여율 점수
+    motivation_distance.py   # SW4: 도전 의지(거리) 점수
     run_model1.py           # 모델1 실행 (SW3+SW4)
   model2/
     healthscore.py      # SW2: 체력 점수(속도)
