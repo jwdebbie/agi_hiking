@@ -1,7 +1,9 @@
 # Python bytecode
 __pycache__/
 *.pyc
-# EOF
+
+# Environment File
+.env
 
 # Virtual environment
 .venv/
