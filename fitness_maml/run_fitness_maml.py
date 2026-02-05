@@ -10,12 +10,9 @@ Input:
   - PostgreSQL의 total_hiking_data view (data_loader를 통해 로드)
   
 Output:
-  - 학습된 모델: saved_models/fitness_maml_v1_TIMESTAMP.pt
-  - 평가 결과: saved_models/fitness_maml_v1_results_TIMESTAMP.csv
+  - 학습된 모델: saved_models/fitness_maml_TIMESTAMP.pt
+  - 평가 결과: saved_models/fitness_maml_results_TIMESTAMP.csv
   - K-shot별 성능 비교 (K=1, 5, 10)
-
-실행:
-  python -m fitness_maml.run_fitness_maml_v1
 """
 
 import sys
@@ -47,8 +44,8 @@ def main():
     # 설정
     config = {
         'random_seed': 42,
-        'test_user_ratio': 0.2,         # 테스트 사용자 비율
-        'min_samples_per_user': 5,      # 사용자당 최소 샘플 수
+        'test_user_ratio': 0.2,          # 테스트 사용자 비율
+        'min_samples_per_user': 5,       # 사용자당 최소 샘플 수
         'k_shot_train': 5,               # 학습 시 Support set 크기
         'k_shot_eval': [1, 5, 10],       # 평가 시 K-shot 설정들
         'hidden_dim': 64,                # 은닉층 차원
@@ -57,7 +54,7 @@ def main():
         'inner_lr': 0.01,                # Inner loop 학습률
         'outer_lr': 0.001,               # Outer loop 학습률
         'inner_steps': 3,                # Inner loop 반복 횟수
-        'n_epochs': 100,                  # 메타 학습 에폭 수
+        'n_epochs': 100,                 # 메타 학습 에폭 수
         'tasks_per_batch': 4,            # 배치당 Task(사용자) 수
         'device': 'cuda' if torch.cuda.is_available() else 'cpu'
     }
@@ -228,7 +225,7 @@ def main():
     model_dir = os.path.join(project_root, 'saved_models')
     os.makedirs(model_dir, exist_ok=True)
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    model_path = os.path.join(model_dir, f'fitness_maml_v1_{timestamp}.pt')
+    model_path = os.path.join(model_dir, f'fitness_maml_{timestamp}.pt')
     trainer.save_model(model_path)
     
     # 12. 평가
@@ -277,7 +274,7 @@ def main():
     print(results_df.to_string(index=False, float_format=lambda x: f'{x:.4f}'))
     
     # 결과 저장
-    results_path = os.path.join(model_dir, f'fitness_maml_v1_results_{timestamp}.csv')
+    results_path = os.path.join(model_dir, f'fitness_maml_results_{timestamp}.csv')
     results_df.to_csv(results_path, index=False)
     print(f"\n✓ 결과 저장: {results_path}")
     print(f"✓ 모델 저장: {model_path}")
