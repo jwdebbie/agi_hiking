@@ -24,6 +24,7 @@ import torch
 import numpy as np
 import pandas as pd
 from datetime import datetime
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 # 프로젝트 루트 추가
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -56,7 +57,7 @@ def main():
         'inner_lr': 0.01,                # Inner loop 학습률
         'outer_lr': 0.001,               # Outer loop 학습률
         'inner_steps': 3,                # Inner loop 반복 횟수
-        'n_epochs': 50,                  # 메타 학습 에폭 수
+        'n_epochs': 100,                  # 메타 학습 에폭 수
         'tasks_per_batch': 4,            # 배치당 Task(사용자) 수
         'device': 'cuda' if torch.cuda.is_available() else 'cpu'
     }
@@ -135,6 +136,22 @@ def main():
     print(f"  총 샘플 수: {len(df)}")
     print(f"  총 사용자 수: {df['user_key'].nunique()}")
     print(f"  사용자당 평균 샘플 수: {len(df) / df['user_key'].nunique():.1f}")
+
+    # 5.5 피처 및 라벨 정규화 (추가 사항)
+    print("\n" + "=" * 80)
+    print("5-1️⃣  데이터 정규화 (Scaling) 적용...")
+    print("=" * 80)
+
+    # 피처 정규화: 평균 0, 표준편차 1로 변환 (StandardScaler)
+    scaler_features = StandardScaler()
+    df[feature_cols] = scaler_features.fit_transform(df[feature_cols])
+
+    # 라벨 정규화: 0~100 사이의 점수를 0~1 사이로 압축 (MinMaxScaler)
+    # 딥러닝 모델이 0~1 사이의 값을 예측할 때 가장 안정적으로 수렴함
+    scaler_labels = MinMaxScaler()
+    df[label_cols] = scaler_labels.fit_transform(df[label_cols])
+
+    print("✓ 모든 피처와 라벨이 학습 최적화 범위로 스케일링되었습니다.")
 
     # 6. Train/Test 분할
     print("\n" + "=" * 80)
