@@ -9,5 +9,5 @@ __pycache__/
 .venv/
 
 # test files
-.test/
-.saved_models/
+test/
+saved_models/
