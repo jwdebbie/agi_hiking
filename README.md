@@ -3,56 +3,42 @@
 ## 1. 폴더 구조
 
 ```text
-orda_smu/
+ORDA_SMU/
+├── data/
+│   ├── data_loader.py          # PostgreSQL view 데이터 로드
+│   ├── db_config.py            # DB 접속 설정
+│   ├── impute_location.py      # 위치 정보 보정
+│   └── kakao_geocode_db.py     # 주소 → 좌표 변환
 │
-├── data/                         # 데이터 로더
-│   ├── __init__.py
-│   ├── data_loader.py            # PostgreSQL 연동
-│   ├── db_config.py              # DB 설정
-│   └── kakao_geocode_db.py       # 카카오 API 지오코딩
+├── maml_base/                  # MAML 공통 모듈
+│   ├── features.py             # 피처 엔지니어링
+│   ├── task_dataset.py         # 사용자 단위 Task 데이터셋 구성
+│   ├── nets.py                 # 신경망 모델 정의
+│   └── maml_trainer.py         # MAML 학습 및 평가 로직
 │
-├── maml_base/                    # MAML 공통 모듈
-│   ├── __init__.py
-│   ├── features.py               # 피처 엔지니어링
-│   ├── nets.py                   # 신경망 모델 (MLP, 멀티태스크)
-│   ├── maml_trainer.py           # MAML 학습 및 평가
-│   └── task_dataset.py           # Task 데이터셋, Sampler
+├── motivation_maml/            # 동기 점수 MAML 모델
+│   ├── pseudo_labels.py        # Motivation 의사 라벨 생성
+│   └── run_motivation_maml.py  # MAML 실행 스크립트
 │
-├── motivation_stat/              # 동기 점수 통계 모델 (구 model1)
-│   ├── __init__.py
-│   ├── motivation_stamp.py       # SW3: 참여율 점수
-│   ├── motivation_distance.py    # SW4: 도전 의지 점수
-│   └── run_model1.py             # 실행 스크립트
+├── fitness_maml/               # 체력/트렌드 MAML 모델
+│   ├── pseudo_labels.py        # Fitness/Trend 의사 라벨 생성
+│   └── run_fitness_maml.py     # MAML 실행 스크립트
 │
-├── motivation_maml/              # 동기 점수 MAML 모델
-│   ├── __init__.py
-│   ├── pseudo_labels.py          # 의사 라벨 생성
-│   └── run_motivation_maml.py    # 실행 스크립트
+├── motivation_stat/            # 통계 기반 동기 점수 모델 (의사 라벨용)
+│   ├── motivation_stamp.py     # SW3: 참여율 점수
+│   ├── motivation_distance.py  # SW4: 거리 기반 도전 의지
+│   └── run_model1.py           # 통계 모델 실행
 │
-├── fitness_stat/                 # 체력/트렌드 통계 모델 (구 model2)
-│   ├── __init__.py
-│   ├── health_score.py           # SW2: 체력 점수
-│   ├── trend_score.py            # SW6: 개선율 점수
-│   └── run_model2.py             # 실행 스크립트
+├── fitness_stat/               # 통계 기반 체력/트렌드 점수 모델 (의사 라벨용)
+│   ├── health_score.py         # SW2: 체력 점수
+│   ├── trend_score.py          # SW6: 개선 트렌드 점수
+│   └── run_model2.py           # 통계 모델 실행
 │
-├── fitness_maml/                 # 체력/트렌드 MAML 모델
-│   ├── __init__.py
-│   ├── pseudo_labels.py          # 의사 라벨 생성
-│   └── run_fitness_maml.py       # 실행 스크립트 (멀티태스크)
+├── score_integration/          # 점수 통합 및 정규화
+│   └── normalizer.py
 │
-├── score_integration/            # 점수 통합 및 등급화 (구 model3)
-│   ├── __init__.py
-│   └── normalizer.py             # 나이대별 정규화 → S~D 등급
-│
-├── saved_models/                 # 학습된 모델 저장소
-│   ├── motivation_maml_YYYYMMDD_HHMMSS.pt
-│   ├── fitness_maml_YYYYMMDD_HHMMSS.pt
-│   └── *_results_*.csv           # 평가 결과
-│
-├── .env                          # 환경변수 (DB, API 키)
-├── .gitignore
-├── requirements.txt              # 패키지 의존성
-└── README.md                     # 프로젝트 문서 (이 파일)
+├── requirements.txt
+└── README.md
 
 ```
 
