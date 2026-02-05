@@ -4,26 +4,55 @@
 
 ```text
 orda_smu/
-  data/
-    __init__.py
-    db_config.py        # DB 접속 정보
-    data_loader.py      # PostgreSQL → total_hiking_data 로딩
-    csv/
-        geocode_address_area.py # 주소 → 행정구역 변환 (카카오맵 API)
-        *.csv                   # 전처리된 위치/주소 데이터
-  model1/
-    motivation_stamp.py      # SW3: 참여율 점수
-    motivation_distance.py   # SW4: 도전 의지(거리) 점수
-    run_model1.py           # 모델1 실행 (SW3+SW4)
-  model2/
-    healthscore.py      # SW2: 체력 점수(속도)
-    trendscore.py       # SW6: 개선율 점수
-    run_model2.py       # 모델2 실행 (SW2+SW6)
-  model3/
-    normalizer.py       # 모델1+2 + 나이대 → 등급(S~D)
-  .venv/                # 가상환경 (로컬에서만 사용)
-  requirements.txt      # 필요한 패키지 목록
-  README.md
+│
+├── data/                         # 데이터 로더
+│   ├── __init__.py
+│   ├── data_loader.py            # PostgreSQL 연동
+│   ├── db_config.py              # DB 설정
+│   └── kakao_geocode_db.py       # 카카오 API 지오코딩
+│
+├── maml_base/                    # MAML 공통 모듈
+│   ├── __init__.py
+│   ├── features.py               # 피처 엔지니어링
+│   ├── nets.py                   # 신경망 모델 (MLP, 멀티태스크)
+│   ├── maml_trainer.py           # MAML 학습 및 평가
+│   └── task_dataset.py           # Task 데이터셋, Sampler
+│
+├── motivation_stat/              # 동기 점수 통계 모델 (구 model1)
+│   ├── __init__.py
+│   ├── motivation_stamp.py       # SW3: 참여율 점수
+│   ├── motivation_distance.py    # SW4: 도전 의지 점수
+│   └── run_model1.py             # 실행 스크립트
+│
+├── motivation_maml/              # 동기 점수 MAML 모델
+│   ├── __init__.py
+│   ├── pseudo_labels.py          # 의사 라벨 생성
+│   └── run_motivation_maml.py    # 실행 스크립트
+│
+├── fitness_stat/                 # 체력/트렌드 통계 모델 (구 model2)
+│   ├── __init__.py
+│   ├── health_score.py           # SW2: 체력 점수
+│   ├── trend_score.py            # SW6: 개선율 점수
+│   └── run_model2.py             # 실행 스크립트
+│
+├── fitness_maml/                 # 체력/트렌드 MAML 모델
+│   ├── __init__.py
+│   ├── pseudo_labels.py          # 의사 라벨 생성
+│   └── run_fitness_maml.py       # 실행 스크립트 (멀티태스크)
+│
+├── score_integration/            # 점수 통합 및 등급화 (구 model3)
+│   ├── __init__.py
+│   └── normalizer.py             # 나이대별 정규화 → S~D 등급
+│
+├── saved_models/                 # 학습된 모델 저장소
+│   ├── motivation_maml_YYYYMMDD_HHMMSS.pt
+│   ├── fitness_maml_YYYYMMDD_HHMMSS.pt
+│   └── *_results_*.csv           # 평가 결과
+│
+├── .env                          # 환경변수 (DB, API 키)
+├── .gitignore
+├── requirements.txt              # 패키지 의존성
+└── README.md                     # 프로젝트 문서 (이 파일)
 
 ```
 
