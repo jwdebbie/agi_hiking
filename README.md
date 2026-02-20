@@ -1,9 +1,9 @@
-# ORDA_SMU 프로젝트 구조 및 사용법
+# agi_hiking 프로젝트 구조 및 사용법
 
 ## 1. 폴더 구조
 
 ```text
-ORDA_SMU/
+agi_hiking/
 ├── data/
 │   ├── data_loader.py          # PostgreSQL view 데이터 로드
 │   ├── db_config.py            # DB 접속 설정
