@@ -1,9 +1,9 @@
-# ORDA_SMU 프로젝트 구조 및 사용법
+# AGI_HIKING 프로젝트 구조 및 사용법
 
 ## 1. 폴더 구조
 
 ```text
-orda_smu/
+AGI_HIKING/
   data/
     __init__.py
     db_config.py        # DB 접속 정보
