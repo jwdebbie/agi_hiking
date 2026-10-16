@@ -1,4 +1,4 @@
-# AGI_HIKING 프로젝트 구조 및 사용법
+# AGI_HIKING 
 
 ## 1. 폴더 구조
 
